@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Analyze Transaction</title>
+</head>
+<body>
+    <header>
+        <h1>Analyze Your Transaction</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Transaction Details</h2>
+            <form method="POST" action="{{ url_for('analyze') }}">
+                <label for="transaction_amount">Transaction Amount:</label>
+                <input type="number" step="0.01" name="transaction_amount" required>
+
+                <label for="transaction_time">Transaction Time:</label>
+                <input type="number" name="transaction_time" required>
+
+                <!-- Add other input fields as required for your model -->
+
+                <button type="submit">Analyze</button>
+            </form>
+        </section>
+    </main>
+    <!-- Include messages for feedback -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+</body>
+</html>
