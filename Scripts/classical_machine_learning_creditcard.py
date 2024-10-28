@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 import shap
 from lime.lime_tabular import LimeTabularExplainer
 import os
-
+import joblib
 
 class CreditCardModelingPipeline:
     def __init__(self, df, target_column, dataset_name="fraud-data"):
@@ -31,6 +31,7 @@ class CreditCardModelingPipeline:
             self.X, self.y, test_size=0.2, random_state=42
         )
 
+    
     def train_models(self):
         mlflow.set_experiment(f"{self.dataset_name}_model_training")
         active_run = mlflow.active_run()
@@ -42,27 +43,30 @@ class CreditCardModelingPipeline:
                 # Logistic Regression
                 self.logistic_model = LogisticRegression(max_iter=2000)
                 self.logistic_model.fit(self.X_train, self.y_train)
-                self.logistic_pred = self.logistic_model.predict(self.X_test)
-                self.log_metrics(self.y_test, self.logistic_pred, "Logistic Regression")
+                self.log_metrics(self.y_test, self.logistic_model.predict(self.X_test), "Logistic Regression")
                 mlflow.sklearn.log_model(self.logistic_model, "logistic_regression_model")
+                joblib.dump(self.logistic_model, "../models/logistic_regression_model.pkl")  # Save as .pkl
 
                 # Decision Tree
                 self.decision_tree_model = DecisionTreeClassifier(random_state=42)
                 self.decision_tree_model.fit(self.X_train, self.y_train)
                 self.log_metrics(self.y_test, self.decision_tree_model.predict(self.X_test), "Decision Tree")
                 mlflow.sklearn.log_model(self.decision_tree_model, "decision_tree_model")
+                joblib.dump(self.decision_tree_model, "../models/decision_tree_model.pkl")  # Save as .pkl
 
                 # Random Forest
                 self.random_forest_model = RandomForestClassifier(random_state=42)
                 self.random_forest_model.fit(self.X_train, self.y_train)
                 self.log_metrics(self.y_test, self.random_forest_model.predict(self.X_test), "Random Forest")
                 mlflow.sklearn.log_model(self.random_forest_model, "random_forest_model")
+                joblib.dump(self.random_forest_model, "../models/random_forest_model.pkl")  # Save as .pkl
 
                 # Gradient Boosting
                 self.gradient_boosting_model = GradientBoostingClassifier(random_state=42)
                 self.gradient_boosting_model.fit(self.X_train, self.y_train)
                 self.log_metrics(self.y_test, self.gradient_boosting_model.predict(self.X_test), "Gradient Boosting")
                 mlflow.sklearn.log_model(self.gradient_boosting_model, "gradient_boosting_model")
+                joblib.dump(self.gradient_boosting_model, "../models/gradient_boosting_model.pkl")  # Save as .pkl
 
             except Exception as e:
                 print("An error occurred during model training:", e)
@@ -163,41 +167,43 @@ class CreditCardModelingPipeline:
 
     def shap_analysis(self):
         """
-        Generates a SHAP analysis for the model on the test dataset.
-        Produces and saves a SHAP force plot as an HTML file and a summary plot as a PNG file.
+        Generates a SHAP analysis for the trained gradient boosting model on the test dataset.
+        Produces and saves a SHAP summary plot as a PNG file and a SHAP force plot as an HTML file.
         """
+        # Check if the gradient boosting model has been trained
+        if not hasattr(self, 'gradient_boosting_model'):
+            raise AttributeError("The model is not trained. Please train the model by running `train_models()` first.")
+        
         # Ensure the output directory exists
         output_dir = '../Images/'
         os.makedirs(output_dir, exist_ok=True)
 
-        # Initialize the SHAP explainer
+        # Initialize the SHAP explainer for the gradient boosting model
         explainer = shap.TreeExplainer(self.gradient_boosting_model)
 
         # Calculate SHAP values for the test set
         shap_values = explainer.shap_values(self.X_test)
 
-        # For binary classification, shap_values[1] holds the SHAP values for the positive class
-        if isinstance(shap_values, list) and len(shap_values) > 1:
-            shap_values_class = shap_values[1]
+        # Determine SHAP values and expected value based on binary or multiclass model
+        if isinstance(shap_values, list) and len(shap_values) > 1:  # Binary classification
+            shap_values_class = shap_values[1]  # SHAP values for the positive class
             expected_value = explainer.expected_value[1]
-        else:
+        else:  # Multiclass or regression
             shap_values_class = shap_values
             expected_value = explainer.expected_value
 
         # Generate and save the SHAP summary plot
         plt.figure()
-        shap.summary_plot(shap_values, self.X_test, plot_type="bar", show=False)  # show=False prevents display
+        shap.summary_plot(shap_values_class, self.X_test, plot_type="bar", show=False)  # show=False to suppress plot display
         summary_plot_path = os.path.join(output_dir, "shap_summary_plot.png")
-        plt.savefig(summary_plot_path, bbox_inches='tight')  # bbox_inches='tight' avoids clipping
-        plt.close()
+        plt.savefig(summary_plot_path, bbox_inches='tight')  # Save the summary plot as PNG
+        plt.close()  # Close the figure
 
-        # Generate force plot for the first instance
-        shap.initjs()  # Initialize JavaScript for SHAP plots
+        # Generate and save a SHAP force plot for the first instance
+        shap.initjs()  # Initialize JavaScript for interactive SHAP plots
         force_plot = shap.force_plot(expected_value, shap_values_class[0], self.X_test.iloc[0], matplotlib=False)
-
-        # Save the force plot to an HTML file
         force_plot_path = os.path.join(output_dir, "shap_force_plot.html")
-        shap.save_html(force_plot_path, force_plot)
+        shap.save_html(force_plot_path, force_plot)  # Save the force plot as HTML
 
         print(f"SHAP summary plot saved as {summary_plot_path}")
         print(f"SHAP force plot saved as {force_plot_path}")
