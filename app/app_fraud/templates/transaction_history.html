@@ -1,0 +1,21 @@
+
+<!-- templates/transaction_history.html -->
+{% extends "layout.html" %}
+
+{% block title %}Transaction History{% endblock %}
+
+{% block content %}
+    <main>
+        <h1 style="font-size: 40px; text-align: center; font-family: 'Microsoft JhengHei UI Light'; color: white;">Transaction History</h1>
+        <p style="font-size: 25px; text-align: center; font-family: 'Microsoft JhengHei UI Light'; color: white;">
+            This section displays the history of all transactions made by users. You can view transaction details including timestamps, values, and status (fraudulent or legitimate).
+        </p>
+        <ul style="list-style-type: none; padding: 0; text-align: center; font-family: 'Microsoft JhengHei UI Light'; color: white;">
+            <li><strong>Transaction ID:</strong> Unique identifier for each transaction.</li>
+            <li><strong>User ID:</strong> Identifier for the user associated with the transaction.</li>
+            <li><strong>Purchase Time:</strong> The timestamp of when the transaction was made.</li>
+            <li><strong>Purchase Value:</strong> The monetary value of the transaction.</li>
+            <li><strong>Status:</strong> Indicates whether the transaction is fraudulent or legitimate.</li>
+        </ul>
+    </main>
+{% endblock %}

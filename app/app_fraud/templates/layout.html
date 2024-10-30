@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Fraud Detection System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-image: url('{{ url_for("static", filename="bank_background.jpeg") }}'); /* Set the background image */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the background image */
+            color: white; /* Default text color */
+            font-family: 'Microsoft JhengHei UI Light', Arial, sans-serif; /* Change font family */
+        }
+        nav ul {
+            list-style-type: none; 
+            padding: 0; 
+            text-align: center; 
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for navbar */
+        }
+        nav ul li {
+            display: inline; 
+            margin: 0 15px; 
+        }
+        nav ul li a {
+            text-decoration: none; 
+            font-size: 24px; 
+            font-weight: bold; 
+            color: #FFD700; /* Gold color for links */
+            transition: color 0.3s; 
+        }
+        nav ul li a:hover {
+            color: #FFA500; /* Orange color on hover */
+        }
+        main {
+            text-align: center; 
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for content */
+            padding: 50px; /* Padding around content */
+            border-radius: 10px; /* Rounded corners */
+            margin: 50px; /* Margin around content */
+        }
+        footer {
+            text-align: center; 
+            padding: 20px; 
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for footer */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/dataset">Dataset</a></li>
+                <li><a href="/create_transaction">Create Transaction</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Adey Innovations Inc. All rights reserved.</p>
+    </footer>
+</body>
+</html>

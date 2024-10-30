@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}Dataset Information{% endblock %}
+
+{% block content %}
+    <main>
+        <h1 style="font-size: 40px; text-align: center; font-family: 'Microsoft JhengHei UI Light'; color: white;">Dataset Overview</h1>
+        <p style="font-size: 20px; text-align: center; font-family: 'Microsoft JhengHei UI Light'; color: white;">
+            This dataset contains transaction data used for fraud detection, comprising the following attributes:
+        </p>
+        <ul style="font-size: 20px; list-style-type: none; padding: 0; text-align: center; font-family: 'Microsoft JhengHei UI Light'; color: white;">
+            <li><strong style="color: yellow;">user_id:</strong> Unique identifier for each user.</li>
+            <li><strong style="color: yellow;">signup_time:</strong> Timestamp indicating when the user signed up.</li>
+            <li><strong style="color: yellow;">purchase_time:</strong> Timestamp for when a purchase was made.</li>
+            <li><strong style="color: yellow;">purchase_value:</strong> The monetary value of the purchase.</li>
+            <li><strong style="color: yellow;">device_id:</strong> Identifier for the device used for the transaction.</li>
+            <li><strong style="color: yellow;">source:</strong> The origin of the traffic (e.g., organic, paid).</li>
+            <li><strong style="color: yellow;">browser:</strong> The web browser used for making the transaction.</li>
+            <li><strong style="color: yellow;">sex:</strong> Gender of the user.</li>
+            <li><strong style="color: yellow;">age:</strong> Age of the user.</li>
+            <li><strong style="color: yellow;">ip_address:</strong> The IP address from which the user accessed the service.</li>
+            <li><strong style="color: yellow;">country:</strong> The country of the user, indicating the geographical location.</li>
+            <li><strong style="color: yellow;">class:</strong> Indicates whether the transaction is fraudulent or legitimate.</li>
+        </ul>
+
+        <!-- File Upload Section -->
+        <h2 style="font-size: 30px; text-align: center; font-family: 'Microsoft JhengHei UI Light'; color: white;">Upload Your Dataset</h2>
+        <form action="{{ url_for('dataset') }}" method="post" enctype="multipart/form-data" style="text-align: center;">
+            <input type="file" name="file" accept=".csv" required style="font-size: 20px; padding: 10px;">
+            <br><br>
+            <button type="submit" style="font-size: 20px; padding: 10px; background-color: yellow; border: none; border-radius: 5px; cursor: pointer;">Upload</button>
+        </form>
+
+        <!-- Preview Section -->
+        <div>
+            {% if dataset_preview %}
+                <h3 style="font-size: 30px; text-align: center; font-family: 'Microsoft JhengHei UI Light'; color: white;">Uploaded Dataset Preview:</h3>
+                <div style="overflow-x: auto; text-align: center;">
+                    {{ dataset_preview|safe }}
+                </div>
+            {% endif %}
+        </div>
+
+        <br>
+        <a href="/" style="color: white; text-decoration: none;">Back to Home</a>
+    </main>
+{% endblock %}

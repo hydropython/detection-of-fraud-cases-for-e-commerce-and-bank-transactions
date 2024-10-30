@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    {% extends "layout.html" %}
+
+    {% block content %}
+    <div class="container">
+        <h1>Fraud Detection Dashboard</h1>
+        <div class="summary">
+            <h2>Summary of Transactions</h2>
+            <div class="summary-box">
+                <h3>Total Transactions</h3>
+                <p>{{ balanced_fraud_df.shape[0] }}</p>
+            </div>
+            <div class="summary-box">
+                <h3>Total Fraud Cases</h3>
+                <p>{{ balanced_fraud_df['class'].sum() }}</p>
+            </div>
+            <div class="summary-box">
+                <h3>Fraud Percentage</h3>
+                <p>{{ (balanced_fraud_df['class'].sum() / balanced_fraud_df.shape[0] * 100) | round(2) }}%</p>
+            </div>
+        </div>
+
+        <h2>Fraud Analysis Plots</h2>
+        <div class="plots">
+            <div class="plot">
+                <h3>Purchase Value Distribution</h3>
+                {{ plot1|safe }}
+            </div>
+            <div class="plot">
+                <h3>Fraud Rate Over Time</h3>
+                {{ plot2|safe }}
+            </div>
+            <div class="plot">
+                <h3>Correlation Matrix</h3>
+                {{ plot3|safe }}
+            </div>
+            <div class="plot">
+                <h3>Fraud Count by Category</h3>
+                {{ plot4|safe }}
+            </div>
+            <div class="plot">
+                <h3>Transaction Type Distribution</h3>
+                {{ plot5|safe }}
+            </div>
+            <div class="plot">
+                <h3>Geographical Distribution of Fraudulent Transactions</h3>
+                {{ plot6|safe }}
+            </div>
+            <div class="plot">
+                <h3>Fraud Count by Country</h3>
+                {{ plot7|safe }}
+            </div>
+            <div class="plot">
+                <h3>Monthly Fraud Trends</h3>
+                {{ plot8|safe }}
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

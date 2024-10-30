@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %}Create Transaction - Fraud Detection System{% endblock %}
+
+{% block content %}
+<div class="form-container" style="text-align: center; font-family: 'Microsoft JhengHei UI Light'; color: white;">
+    <h1 class="form-title" style="font-size: 40px;">Create Transaction</h1>
+    <form method="post" action="/predict">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
+            <div style="margin: 10px;">
+                <label for="user_id" style="font-weight: bold; font-size: 20px;">User ID:</label><br>
+                <input type="text" name="user_id" required style="font-size: 20px;">
+            </div>
+
+            <div style="margin: 10px;">
+                <label for="signup_time" style="font-weight: bold; font-size: 20px;">Signup Time:</label><br>
+                <input type="datetime-local" name="signup_time" required style="font-size: 20px;">
+            </div>
+
+            <div style="margin: 10px;">
+                <label for="purchase_time" style="font-weight: bold; font-size: 20px;">Purchase Time:</label><br>
+                <input type="datetime-local" name="purchase_time" required style="font-size: 20px;">
+            </div>
+
+            <div style="margin: 10px;">
+                <label for="purchase_value" style="font-weight: bold; font-size: 20px;">Purchase Value:</label><br>
+                <input type="number" name="purchase_value" required style="font-size: 20px;">
+            </div>
+
+            <div style="margin: 10px;">
+                <label for="device_id" style="font-weight: bold; font-size: 20px;">Device ID:</label><br>
+                <input type="text" name="device_id" required style="font-size: 20px;">
+            </div>
+
+            <div style="margin: 10px;">
+                <label for="source" style="font-weight: bold; font-size: 20px;">Source:</label><br>
+                <input type="text" name="source" required style="font-size: 20px;">
+            </div>
+
+            <div style="margin: 10px;">
+                <label for="browser" style="font-weight: bold; font-size: 20px;">Browser:</label><br>
+                <input type="text" name="browser" required style="font-size: 20px;">
+            </div>
+
+            <div style="margin: 10px;">
+                <label for="sex" style="font-weight: bold; font-size: 20px;">Sex:</label><br>
+                <select name="sex" required style="font-size: 20px;">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div style="margin: 10px;">
+                <label for="age" style="font-weight: bold; font-size: 20px;">Age:</label><br>
+                <input type="number" name="age" min="0" required style="font-size: 20px;">
+            </div>
+
+            <div style="margin: 10px;">
+                <label for="ip_address" style="font-weight: bold; font-size: 20px;">IP Address:</label><br>
+                <input type="text" name="ip_address" required style="font-size: 20px;">
+            </div>
+
+            <div style="margin: 10px;">
+                <label for="country" style="font-weight: bold; font-size: 20px;">Country:</label><br>
+                <input type="text" name="country" required style="font-size: 20px;">
+            </div>
+        </div>
+
+        <!-- Hidden fields for additional data -->
+        <input type="hidden" name="class" value="">
+        <input type="hidden" name="ip_numeric" value="">
+
+        <input type="submit" value="Predict" style="font-size: 24px; font-weight: bold; color: yellow; background-color: black; border: none; padding: 10px 20px; cursor: pointer;">
+    </form>
+</div>
+{% endblock %}
